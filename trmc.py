@@ -13,22 +13,22 @@ def load(filepaths, offsettime = None, sub_lowpow = False):
     scale = unitdict[back_V[-1]]
     back_V = float(back_V[:len(back_V)-1])*scale # remove mV or uV and scale appropriately
 
-    time = pd.read_csv(filepaths[0], skiprows = 13)['Time(s)']
-    V1 = pd.read_csv(filepaths[-1], skiprows = 13)['Voltage (V)']
+    # time = pd.read_csv(filepaths[0], skiprows = 13)['Time(s)']
+    V1 = pd.read_csv(filepaths[-1], skiprows = 13,index_col = 0)['Voltage (V)']
+    time  = V1.index
     df_V= pd.DataFrame(index = time)
     fluences = pd.Series(index = filepaths)
     for filepath in filepaths:
 
-        temp = pd.read_csv(filepath, skiprows = 13)
+        temp = pd.read_csv(filepath, skiprows = 13, index_col=0)
         volt = temp['Voltage (V)']
         if(sub_lowpow):
             volt = volt -V1
         df_V = pd.concat([df_V, volt], axis = 1)
-
+        
         m = re.search('Fluence=(.+?)_',filepath) # Read fluence from filename
         if m:
             fluences[filepath] = m.group(1)
-
     df_V.columns = fluences
     if offsettime is not None:
         df_V = df_V - np.mean(df_V[0:offsettime])
