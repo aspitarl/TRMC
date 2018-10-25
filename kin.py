@@ -11,7 +11,14 @@ def calc_pow(t,I0,params):
     return power, dng
 
 def dnr(n,k1,k2,k3):
-    return -k1*n - k2*n**2 - k3*n**3
+    dnr = np.zeros(len(n))
+    if(k1 != 0):
+        dnr = dnr - k1*n
+    if(k2 != 0):
+        dnr = dnr - k2*n**2
+    if(k3 != 0):
+        dnr = dnr - k3*n**3
+    return dnr
 
 def calc_n(dng,k1,k2,k3):
     t = dng.index
