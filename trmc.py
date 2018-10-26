@@ -48,11 +48,12 @@ def convert_V2cond(df_V,back_V,K):
     df_cond = - ((df_V)/back_V)/K
     return df_cond
 
-def maxG_and_fom(df_cond):
-    beta = 2.25
+def maxG_and_fom(df_cond, params):
+    
+    beta = params['beta']
     e = 1.6e-19
-    FA = 1
-    M = 0.25
+    FA = params['FA']
+    M = params['M']
 
     fluences = df_cond.columns
     maxG = pd.Series(index = fluences)
