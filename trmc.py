@@ -89,6 +89,33 @@ def offsettime(df):
     return df_cut
 
 
+def calc_K(f0,w,R0, printparams = False):    
+    Q = f0/w
+    t_rc = Q/(np.pi*f0)
+
+    cav_w = 22.86e-3 #km(?)
+    cav_h = 10.16e-3 #km
+    cav_l = 76e-3 #mm  just came up with this number
+
+    beta = cav_w/cav_h
+    eps_r = 1 #dielectric
+    eps_0 = 8.85e-12
+    
+    K = ( 2*Q*( 1 + (1/np.sqrt(R0)) ) )/(np.pi*f0*eps_r*eps_0*cav_l*beta)
+    if(printparams):
+#         print('eps: ', "{:.2E}".format(eps))
+#         print('beta: ', "{:.2E}".format(beta))
+#         print('cav_l: ', "{:.2E}".format(cav_l))
+        print('f0: ', "{:.2E}".format(f0))
+        print('w: ', "{:.2E}".format(w))
+        print('R0: ', "{:.2E}".format(R0))
+        print('Checks:')
+        print('Q: ', "{:.2E}".format(Q))
+        print('t_rc: ', "{:.2E}".format(t_rc))
+        print('Output: ')
+        print('K: ', "{:.2E}".format(K))
+    return K
+
 if __name__ == '__main__':
     filepaths_A = ['C:\\Users\\aspit\\OneDrive\\Data\\TRMC\\Gratzel\\Sample A\\Data\\High_Power_Filter=01_Fluence=6.45E+14_data.csv','C:\\Users\\aspit\\OneDrive\\Data\\TRMC\\Gratzel\\Sample A\\Data\\High_Power_Filter=02_Fluence=5.121E+14_data.csv', 'C:\\Users\\aspit\\OneDrive\\Data\\TRMC\\Gratzel\\Sample A\\Data\\High_Power_Filter=03_Fluence=4.07E+14_data.csv', 'C:\\Users\\aspit\\OneDrive\\Data\\TRMC\\Gratzel\\Sample A\\Data\\High_Power_Filter=04_Fluence=3.231E+14_data.csv', 'C:\\Users\\aspit\\OneDrive\\Data\\TRMC\\Gratzel\\Sample A\\Data\\High_Power_Filter=05_Fluence=2.567E+14_data.csv', 'C:\\Users\\aspit\\OneDrive\\Data\\TRMC\\Gratzel\\Sample A\\Data\\High_Power_Filter=06_Fluence=2.038E+14_data.csv', 'C:\\Users\\aspit\\OneDrive\\Data\\TRMC\\Gratzel\\Sample A\\Data\\High_Power_Filter=07_Fluence=1.619E+14_data.csv', 'C:\\Users\\aspit\\OneDrive\\Data\\TRMC\\Gratzel\\Sample A\\Data\\High_Power_Filter=08_Fluence=6.45E+13_data.csv', 'C:\\Users\\aspit\\OneDrive\\Data\\TRMC\\Gratzel\\Sample A\\Data\\High_Power_Filter=09_Fluence=3.231E+13_data.csv', 'C:\\Users\\aspit\\OneDrive\\Data\\TRMC\\Gratzel\\Sample A\\Data\\High_Power_Filter=10_Fluence=6.45E+12_data.csv', 'C:\\Users\\aspit\\OneDrive\\Data\\TRMC\\Gratzel\\Sample A\\Data\\High_Power_Filter=11_Fluence=6.45E+11_data.csv']
     df_A_V, df_A_cond = load(filepaths_A, offsettime = 50e-9, sub_lowpow = True)
