@@ -7,7 +7,7 @@ def load(filepaths, offsettime = None, sub_lowpow = False):
     params = pd.read_csv(filepaths[0], nrows = 11, usecols = [1])
     params = params.transpose()
     amp = float(params['Amplification'][0]) # Is amplification already taken into account?
-    K = float(params['K'][0])
+    # K = float(params['K'][0])
     back_V = params['Background Voltage'][0].replace('V','')
     unitdict = {'m':1e-3, 'u':1e-6}
     scale = unitdict[back_V[-1]]
@@ -31,9 +31,13 @@ def load(filepaths, offsettime = None, sub_lowpow = False):
     df_V.columns = fluences
     if offsettime is not None:
         df_V = df_V - np.mean(df_V[0:offsettime])
-    df_cond = convert_V2cond(df_V,back_V,K)
 
-    return df_V, df_cond
+    if(sub_lowpow):
+        df_V = df_V.drop(df_V.columns[-1], axis = 1)
+
+    # df_cond = convert_V2cond(df_V,back_V,K)
+
+    return df_V, back_V
 
 
 
