@@ -73,6 +73,21 @@ def lor(f,f0,w,R0): #Need to check this
     #return 1-(1-R0)*(w)*(w/((f-f0)**2+w**2))
     return (R0 + (2*(f-f0)/w)**2)/(1 + (2*(f-f0)/w)**2)
 
+def offsettime(df):
+    """remove all data 50ns before the max of the dataframe, then move the max to zero time"""
+#     df_offset = pd.DataFrame(columns = df.columns)
+    timemax = df[df.columns[0]].idxmax()
+    time = df.index
+    time1 = timemax-50e-9
+    time2 = timemax+500e-9
+
+    idx1 = time.get_loc(time1, method = 'nearest')
+    idx2 = time.get_loc(time2, method = 'nearest')
+
+    df_cut = df.iloc[idx1:idx2]
+    df_cut = df_cut.set_index(time[idx1:idx2] - timemax)
+    return df_cut
+
 
 if __name__ == '__main__':
     filepaths_A = ['C:\\Users\\aspit\\OneDrive\\Data\\TRMC\\Gratzel\\Sample A\\Data\\High_Power_Filter=01_Fluence=6.45E+14_data.csv','C:\\Users\\aspit\\OneDrive\\Data\\TRMC\\Gratzel\\Sample A\\Data\\High_Power_Filter=02_Fluence=5.121E+14_data.csv', 'C:\\Users\\aspit\\OneDrive\\Data\\TRMC\\Gratzel\\Sample A\\Data\\High_Power_Filter=03_Fluence=4.07E+14_data.csv', 'C:\\Users\\aspit\\OneDrive\\Data\\TRMC\\Gratzel\\Sample A\\Data\\High_Power_Filter=04_Fluence=3.231E+14_data.csv', 'C:\\Users\\aspit\\OneDrive\\Data\\TRMC\\Gratzel\\Sample A\\Data\\High_Power_Filter=05_Fluence=2.567E+14_data.csv', 'C:\\Users\\aspit\\OneDrive\\Data\\TRMC\\Gratzel\\Sample A\\Data\\High_Power_Filter=06_Fluence=2.038E+14_data.csv', 'C:\\Users\\aspit\\OneDrive\\Data\\TRMC\\Gratzel\\Sample A\\Data\\High_Power_Filter=07_Fluence=1.619E+14_data.csv', 'C:\\Users\\aspit\\OneDrive\\Data\\TRMC\\Gratzel\\Sample A\\Data\\High_Power_Filter=08_Fluence=6.45E+13_data.csv', 'C:\\Users\\aspit\\OneDrive\\Data\\TRMC\\Gratzel\\Sample A\\Data\\High_Power_Filter=09_Fluence=3.231E+13_data.csv', 'C:\\Users\\aspit\\OneDrive\\Data\\TRMC\\Gratzel\\Sample A\\Data\\High_Power_Filter=10_Fluence=6.45E+12_data.csv', 'C:\\Users\\aspit\\OneDrive\\Data\\TRMC\\Gratzel\\Sample A\\Data\\High_Power_Filter=11_Fluence=6.45E+11_data.csv']
