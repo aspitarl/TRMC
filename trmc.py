@@ -73,16 +73,19 @@ def lor(f,f0,w,R0): #Need to check this
     #return 1-(1-R0)*(w)*(w/((f-f0)**2+w**2))
     return (R0 + (2*(f-f0)/w)**2)/(1 + (2*(f-f0)/w)**2)
 
-def offsettime(df):
-    """remove all data 50ns before the max of the dataframe, then move the max to zero time"""
+def offsettime(df, timebefore = 0, timeafter = None):
+    """remove all data 'timebefore' before the max of the dataframe, then move the max to zero time"""
 #     df_offset = pd.DataFrame(columns = df.columns)
     timemax = df[df.columns[0]].idxmax()
     time = df.index
-    time1 = timemax-50e-9
-    time2 = timemax+500e-9
-
+    time1 = timemax-timebefore
     idx1 = time.get_loc(time1, method = 'nearest')
-    idx2 = time.get_loc(time2, method = 'nearest')
+
+    if timeafter is None:
+        idx2 = -1
+    else:
+        time2 = timemax+timeafter
+        idx2 = time.get_loc(time2, method = 'nearest')
 
     df_cut = df.iloc[idx1:idx2]
     df_cut = df_cut.set_index(time[idx1:idx2] - timemax)
