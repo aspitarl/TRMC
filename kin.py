@@ -3,6 +3,7 @@ import numpy as np
 
 
 def calc_pow(t,I0,params):
+    """Calulcates the time dependent power of the pulse"""
     sig = params['FWHM']/(2*np.sqrt(2*np.log(2)))
     p0 = (I0/(sig*np.sqrt(2*np.pi)))
     power = p0*np.exp(-((t-params['t0'])**2)/(2*(sig**2)))
@@ -11,6 +12,7 @@ def calc_pow(t,I0,params):
     return power, dng
 
 def dnr(n,k1,k2,k3):
+    """Recombination rate"""
     dnr = np.zeros(len(n))
     if(k1 != 0):
         dnr = dnr - k1*n
@@ -21,6 +23,7 @@ def dnr(n,k1,k2,k3):
     return dnr
 
 def calc_n(dng,k1,k2,k3):
+    """numerical integration to find number density"""
     t = dng.index
     n = pd.Series(np.zeros(len(t)),index = t)
     for i in range(1,len(t)):

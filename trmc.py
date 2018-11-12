@@ -3,7 +3,12 @@ import numpy as np
 import re
 
 def load(filepaths, offsettime = None, sub_lowpow = False):
+    """
+    Load in a csv set of flucence sweep data
 
+    offsettime - takes an average of the data between 0 and offsettime and subtracts that from the data
+    sub_lowpow - subtracts the low power trace from all datasets
+    """
     params = pd.read_csv(filepaths[0], nrows = 11, usecols = [1])
     params = params.transpose()
     amp = float(params['Amplification'][0]) # Is amplification already taken into account?
@@ -42,8 +47,8 @@ def load(filepaths, offsettime = None, sub_lowpow = False):
 
 
 def load_fluence(filepath):
-    """Fluence file was not included in all experiments?"""
-    filepath = 'C:\\Users\\aspit\\OneDrive\\Data\\TRMC\\Gratzel\\Sample A\\High_Power_3_FluenceSweep.csv'
+    """Loads in fluence data, not sure if working"""
+    # filepath = 'C:\\Users\\aspit\\OneDrive\\Data\\TRMC\\Gratzel\\Sample A\\High_Power_3_FluenceSweep.csv'
     fluencesweep = pd.read_csv(filepath, skiprows = 13)
     fluences = fluencesweep['Fluence(cm^-2)']
     return fluences
@@ -53,7 +58,7 @@ def convert_V2cond(df_V,back_V,K):
     return df_cond
 
 def maxG_and_fom(df_cond, params):
-    
+    """Calculates maxG and the figure of merit from a dataframe of the deltaG"""
     beta = params['beta']
     e = 1.6e-19
     FA = params['FA']*0.9 #0.9 factor from ITO
@@ -69,8 +74,8 @@ def maxG_and_fom(df_cond, params):
 
     return maxG, fom
 
-def lor(f,f0,w,R0): #Need to check this
-    #return 1-(1-R0)*(w)*(w/((f-f0)**2+w**2))
+def lor(f,f0,w,R0): 
+    """Calculates the lorentzian function"""
     return (R0 + (2*(f-f0)/w)**2)/(1 + (2*(f-f0)/w)**2)
 
 def offsettime(df, timebefore = 0, timeafter = None):
@@ -92,7 +97,8 @@ def offsettime(df, timebefore = 0, timeafter = None):
     return df_cut
 
 
-def calc_K(f0,w,R0, printparams = False):    
+def calc_K(f0,w,R0, printparams = False):   
+    """Calculate the K value from the lorentzian fit constants""" 
     Q = f0/w
     t_rc = Q/(np.pi*f0)
 
