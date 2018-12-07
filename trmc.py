@@ -82,9 +82,9 @@ def maxG_and_fom(df_cond, params):
 
     return maxG, fom
 
-def lor(f,f0,w,R0): 
+def lor(f,f0,w,R0, Rinf): 
     """Calculates the lorentzian function"""
-    return (R0 + (2*(f-f0)/w)**2)/(1 + (2*(f-f0)/w)**2)
+    return (R0 + Rinf*(2*(f-f0)/w)**2)/(1 + (2*(f-f0)/w)**2)
 
 def offsettime(df, timebefore = 0, timeafter = None):
     """remove all data 'timebefore' before the max of the dataframe, then move the max to zero time"""
